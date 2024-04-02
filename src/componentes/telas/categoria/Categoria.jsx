@@ -4,7 +4,8 @@ import { getCategoriasAPI, getCategoriaPorCodigoAPI,
     deleteCategoriaPorCodigoAPI, cadastrarCategoriaAPI } 
     from "../../../servicos/CategoriaServico";
 import Tabela from "./Tabela";
-
+import Carregando from "../../comuns/Carregando";
+import Form from "./Form";
 
 function Categoria(){
 
@@ -12,6 +13,7 @@ function Categoria(){
     const [listaObjetos, setListaObjetos] = useState([]);
     const [editar, setEditar] = useState(false);
     const [objeto, setObjeto] = useState({codigo : "", nome : ""});
+    const [carregando, setCarregando] = useState(true);
 
     const novoObjeto = () => {
         setEditar(false);
@@ -29,7 +31,7 @@ function Categoria(){
         e.preventDefault();
         let metodo = editar ?  "PUT" : "POST";
         try {
-            let retornoAPI = await cadastrarCategoriaAPI(objeto, metodo);
+            let retornoAPI = await cadastrarCategoriaAPI(metodo, objeto);
             setAlerta({status : retornoAPI.status, message : retornoAPI.message});
             setObjeto(retornoAPI.objeto);
             if(!editar){
@@ -48,7 +50,9 @@ function Categoria(){
     }
 
     const recuperaCategorias = async () => {
-        setListaObjetos(await getCategoriasAPI());
+        setCarregando(true);
+        setListaObjetos(await getCategoriasAPI()); // depois que termina a consulta ele nao carrega mais entao passa false
+        setCarregando(false);
     }
 
     const remover = async codigo => {
@@ -68,8 +72,11 @@ function Categoria(){
             alerta, listaObjetos, remover,
             objeto, editar, acaoCadastrar, handleChange, novoObjeto, editarObjeto
         }}>
-            <Tabela/>
-
+            <Carregando carregando={carregando}>
+                <Tabela/>
+            </Carregando>
+            <Form/>
+        
         </CategoriaContext.Provider>
     )
 
