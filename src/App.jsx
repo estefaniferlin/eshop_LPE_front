@@ -6,6 +6,7 @@ import '@popperjs/core/dist/cjs/popper.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import Categoria from "./componentes/telas/categoria/Categoria";
+import Produto from "./componentes/telas/produto/Produto";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path : "categorias",
         element : <Categoria/>
+      },
+      {
+        path : "produtos",
+        element : <Produto/>
       }
     ]
   }
